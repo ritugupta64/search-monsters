@@ -1,24 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+
+import { CardList } from "./components/card-list/card-list";
+import { SearchBox } from "./components/search/search";
+
+import "./App.css";
 
 function App() {
+  const [data, setData] = useState([]);
+  const [search, setSearch] = useState("");
+
+  fetch("https://jsonplaceholder.typicode.com/posts")
+    .then((res) => res.json())
+    .then((data) => setData(data));
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const filteredData = () =>
+    data.filter((item) =>
+      item.title.toLowerCase().includes(search.toLowerCase())
+    );
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <SearchBox
+        type="search"
+        placeholder="search the monsters..."
+        handleChange={handleChange}
+      />
+      <CardList collection={filteredData()} />
     </div>
   );
 }

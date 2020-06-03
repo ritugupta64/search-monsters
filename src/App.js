@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { CardList } from "./components/card-list/card-list";
 import { SearchBox } from "./components/search/search";
@@ -12,6 +12,15 @@ function App() {
   fetch("https://jsonplaceholder.typicode.com/posts")
     .then((res) => res.json())
     .then((data) => setData(data));
+
+  useEffect(() => {
+    filteredData();
+  });
+
+  useEffect(() => {
+    setData(data)
+    setSearch(search)
+  }, [data, search])
 
   const handleChange = (e) => {
     setSearch(e.target.value);
